@@ -8,6 +8,8 @@ const App = () => {
   const [abv, setAbv] = useState(0);
   const [durationInHours, setDurationInHours] = useState(0);
 
+  // save config in object
+
   /*
     Alkohol i gram (dl * Vol% * 0,8)/ (kroppsvekten i kg * X %) – (Y * timer fra drikkestart) = promille
 
