@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/gutta-bar/static/css/main.073c9b0a.css",
-    "main.js": "/gutta-bar/static/js/main.c6b247cf.js",
+    "main.css": "/gutta-bar/static/css/main.ae062602.css",
+    "main.js": "/gutta-bar/static/js/main.c6672910.js",
     "static/js/787.19f32fa8.chunk.js": "/gutta-bar/static/js/787.19f32fa8.chunk.js",
+    "static/media/logo.png": "/gutta-bar/static/media/logo.f03d240e81b155e113b1.png",
     "index.html": "/gutta-bar/index.html",
-    "main.073c9b0a.css.map": "/gutta-bar/static/css/main.073c9b0a.css.map",
-    "main.c6b247cf.js.map": "/gutta-bar/static/js/main.c6b247cf.js.map",
+    "main.ae062602.css.map": "/gutta-bar/static/css/main.ae062602.css.map",
+    "main.c6672910.js.map": "/gutta-bar/static/js/main.c6672910.js.map",
     "787.19f32fa8.chunk.js.map": "/gutta-bar/static/js/787.19f32fa8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.073c9b0a.css",
-    "static/js/main.c6b247cf.js"
+    "static/css/main.ae062602.css",
+    "static/js/main.c6672910.js"
   ]
 }
