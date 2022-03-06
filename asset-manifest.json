@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/gutta-bar/static/css/main.ae062602.css",
-    "main.js": "/gutta-bar/static/js/main.e442f02e.js",
-    "static/js/787.19f32fa8.chunk.js": "/gutta-bar/static/js/787.19f32fa8.chunk.js",
-    "static/media/logo.png": "/gutta-bar/static/media/logo.f03d240e81b155e113b1.png",
-    "index.html": "/gutta-bar/index.html",
-    "main.ae062602.css.map": "/gutta-bar/static/css/main.ae062602.css.map",
-    "main.e442f02e.js.map": "/gutta-bar/static/js/main.e442f02e.js.map",
-    "787.19f32fa8.chunk.js.map": "/gutta-bar/static/js/787.19f32fa8.chunk.js.map"
+    "main.css": "/static/css/main.ae062602.css",
+    "main.js": "/static/js/main.c7cfb4a9.js",
+    "static/js/787.19f32fa8.chunk.js": "/static/js/787.19f32fa8.chunk.js",
+    "static/media/logo.png": "/static/media/logo.f03d240e81b155e113b1.png",
+    "index.html": "/index.html",
+    "main.ae062602.css.map": "/static/css/main.ae062602.css.map",
+    "main.c7cfb4a9.js.map": "/static/js/main.c7cfb4a9.js.map",
+    "787.19f32fa8.chunk.js.map": "/static/js/787.19f32fa8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ae062602.css",
-    "static/js/main.e442f02e.js"
+    "static/js/main.c7cfb4a9.js"
   ]
 }
