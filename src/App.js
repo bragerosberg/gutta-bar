@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import logo from "./assets/logo.png";
 import Form from "./components/Form";
+import * as datefns from "date-fns";
 
 const BODY_DISTRIBUTION_PERCENTAGE = 0.65;
 const HOURLY_BURN_RATE = 0.15;
@@ -11,8 +12,10 @@ const App = () => {
   const [config, setConfig] = useState({
     bw: localStorage.getItem("bw"),
   });
+  const [startCounter, toggleStartCounter] = useState(false);
   const [setupComplete, toggleSetupComplete] = useState(Boolean(config.bw));
-  const [durationInHours, setDurationInHours] = useState(0); //moment js for config start time
+  const [startTime, setStartTime] = useState(undefined);
+  const [durationInHours, setDurationInHours] = useState(undefined);
 
   useEffect(() => {
     setConfig({
@@ -28,6 +31,19 @@ const App = () => {
     });
   }, [setupComplete]);
 
+  useEffect(() => {
+    setStartTime(new Date());
+  }, [startCounter]);
+
+  useEffect(() => {
+    const timer = setInterval(
+      () => setDurationInHours(durationInHours + 0.016),
+      1000
+    );
+
+    return () => clearTimeout(timer);
+  }, [startTime]);
+
   // save config in object
 
   /*
@@ -37,14 +53,17 @@ const App = () => {
     Y/hbr = 0.15
   */
 
+  const handleAdd = (desiliter) => {
+    if (!startCounter) toggleStartCounter(true);
+    setAbv(calculateAbv(desiliter, 0.45, config.bw));
+  };
+
   const calculateAbv = (unitVolume, alchP, bw) => {
     return (
-      (unitVolume * alchP * 0, 8) / (bw * BODY_DISTRIBUTION_PERCENTAGE) -
+      (unitVolume * alchP * 0.8) / (bw * BODY_DISTRIBUTION_PERCENTAGE) -
       HOURLY_BURN_RATE * durationInHours
     );
   };
-
-  console.log(setupComplete, config);
 
   return (
     <div className="App">
@@ -52,9 +71,13 @@ const App = () => {
       <img className="App-logo" src={logo} alt="gutta" />
       {setupComplete && (
         <>
-          <p>Legg til 0.3L</p>
-          <p>Legg til 0.5L</p>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <button onClick={() => handleAdd(3)}>Legg til 0.3L</button>
+            <button onClick={() => handleAdd(5)}>Legg til 0.5L</button>
+          </div>
           <p>Config complete, kroppsvekt: {config.bw}</p>
+          <p>time spent {durationInHours}</p>
+          <p>Promille {abv}</p>
         </>
       )}
       {!setupComplete && <Form toggleSetupComplete={toggleSetupComplete} />}
