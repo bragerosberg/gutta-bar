@@ -20,7 +20,7 @@ const Intro = () => {
 const App = () => {
   const [grams, setGrams] = useState(0);
   const [bac, setBac] = useState(localStorage.getItem("bac") | "0%");
-  const [bodyweight, setBodyweight] = useState(
+  const [bodyweight, saveBodyweight] = useState(
     Number(JSON.parse(localStorage.getItem("bw")))
   );
 
@@ -35,8 +35,7 @@ const App = () => {
   */
 
   const updateBac = (milliLiter, alchP) => {
-    const newBac = calculateAbv(milliLiter, alchP, bodyweight);
-    console.log(milliLiter, alchP, bodyweight, "newbac");
+    const newBac = calculateAbv(milliLiter, alchP, bodyweight).toFixed(3);
     setBac(calculateAbv(milliLiter, alchP, bodyweight));
     localStorage.setItem("bac", newBac);
   };
@@ -54,14 +53,13 @@ const App = () => {
     updateBac(milliLiter, alchP);
   };
 
-  console.log("grams", grams);
-  console.log("bac", bac);
-
   return (
     <div className="App">
       <Intro />
-      <p>{bac}</p>
-      <Form addUnit={addUnit} />
+      <p>Promille {bac}</p>
+      <Form addUnit={addUnit} saveBodyweight={saveBodyweight} />
+      <br />
+      <button onClick={() => setBac(0)}>Reset BAC</button>
     </div>
   );
 };

@@ -1,5 +1,13 @@
 import React, { useState } from "react";
 
+// TODO
+/* 
+  - [X] Add option to clear bac
+  - [] Make bac decrease over time
+  - [] Add list of bac entries
+    - [] Add time of when it was added
+*/
+
 const ResetConfigButton = () => {
   return (
     <button
@@ -26,7 +34,7 @@ const AddUnit = ({ handleSubmit }) => {
   );
 };
 
-const Form = ({ addUnit }) => {
+const Form = ({ addUnit, saveBodyweight }) => {
   const [isReady, toggleIsReady] = useState(
     Boolean(localStorage.getItem("bw"))
   );
@@ -37,6 +45,7 @@ const Form = ({ addUnit }) => {
   const handleSubmit = () => {
     localStorage.setItem("bw", JSON.stringify(bodyweight));
     toggleIsReady(true);
+    saveBodyweight(bodyweight);
   };
 
   const handleChange = ({ target }) => {
