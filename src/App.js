@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import logo from "./assets/logo.png";
 import Form from "./components/Form";
-import * as datefns from "date-fns";
+import differenceInSeconds from "date-fns/differenceInSeconds";
 
 const BODY_DISTRIBUTION_PERCENTAGE = 0.65;
 const HOURLY_BURN_RATE = 0.15;
-const durationInHours = 0.01;
 
 const Intro = () => {
   return (
@@ -20,6 +19,8 @@ const Intro = () => {
 const App = () => {
   const [grams, setGrams] = useState(0);
   const [bac, setBac] = useState(localStorage.getItem("bac") | "0%");
+  const [sessionStarted, setSessionStarted] = useState(bac > 0);
+  const [hoursDuration, setHoursDuration] = useState(0);
   const [bodyweight, saveBodyweight] = useState(
     Number(JSON.parse(localStorage.getItem("bw")))
   );
@@ -43,23 +44,47 @@ const App = () => {
   const calculateAbv = (milliLiter, alchP, bw) => {
     return (
       getGrams(milliLiter, alchP) / (bw * BODY_DISTRIBUTION_PERCENTAGE) -
-      HOURLY_BURN_RATE * durationInHours
+      HOURLY_BURN_RATE * hoursDuration
     );
   };
 
+  useEffect(() => {
+    if (bac > 0) {
+      const session = setInterval(() => {
+        const newHoursDuration =
+          differenceInSeconds(new Date(), sessionStarted) / 3600;
+        setHoursDuration(newHoursDuration);
+        setBac(
+          grams / (bodyweight * BODY_DISTRIBUTION_PERCENTAGE) -
+            HOURLY_BURN_RATE * newHoursDuration
+        );
+      }, 300000);
+
+      return () => clearInterval(session); //This is important
+    }
+  }, [sessionStarted]);
+
   const addUnit = (entry) => {
+    if (!sessionStarted) {
+      setSessionStarted(new Date());
+    }
     const { milliLiter, alchP } = entry;
     setGrams(getGrams(milliLiter, alchP));
     updateBac(milliLiter, alchP);
   };
 
+  const resetDetails = () => {
+    setBac(0);
+    setGrams(0);
+  };
+
   return (
     <div className="App">
       <Intro />
-      <p>Promille {bac}</p>
+      <p>Promille {bac.toFixed(2)}</p>
       <Form addUnit={addUnit} saveBodyweight={saveBodyweight} />
       <br />
-      <button onClick={() => setBac(0)}>Reset BAC</button>
+      <button onClick={() => resetDetails()}>Reset BAC</button>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // TODO
 /* 
   - [X] Add option to clear bac
-  - [] Make bac decrease over time
+  - [X] Make bac decrease over time
   - [] Add list of bac entries
     - [] Add time of when it was added
 */
