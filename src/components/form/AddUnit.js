@@ -17,7 +17,6 @@ const AddUnit = ({ handleSubmit }) => {
 
   const handleChange = ({ target }) => {
     const { value, name } = target;
-    console.log(target);
     switch (name) {
       case "name":
         setCustomUnitEntry({ ...customUnitEntry, name: value });
@@ -103,7 +102,8 @@ const AddUnit = ({ handleSubmit }) => {
         <div>
           <form
             className="customUnit__form"
-            onSubmit={() =>
+            onSubmit={(e) => {
+              e.preventDefault();
               handleSubmit({
                 id: uuidv4(),
                 milliLiter: customUnitEntry.milliLiter,
@@ -111,8 +111,8 @@ const AddUnit = ({ handleSubmit }) => {
                 name: customUnitEntry.name,
                 time: format(new Date(), "HH:mm"),
                 date: format(new Date(), "dd-MM-yyyy"),
-              })
-            }
+              });
+            }}
           >
             <label htmlFor="name">Name</label>
             <input

@@ -10,13 +10,16 @@ import {
 } from "./config/config";
 import Intro from "./components/intro/Intro";
 import ResetConfigButton from "./components/settings/ResetConfigButton";
+import { parseISO } from "date-fns";
 
 const App = () => {
   const [grams, setGrams] = useState(
     Number(JSON.parse(localStorage.getItem("grams")))
   );
   const [bac, setBac] = useState(Number(localStorage.getItem("bac")));
-  const [sessionStarted, setSessionStarted] = useState(bac > 0);
+  const [sessionStarted, setSessionStarted] = useState(
+    bac > 0 ? Date.parse(localStorage.getItem("sessionStarted")) : false
+  );
   const [hoursDuration, setHoursDuration] = useState(0);
   const [bodyweight, saveBodyweight] = useState(
     Number(JSON.parse(localStorage.getItem("bw")))
@@ -67,15 +70,18 @@ const App = () => {
 
   const addUnit = (entry) => {
     if (!sessionStarted) {
-      setSessionStarted(new Date());
+      const sessionStartTime = new Date();
+      setSessionStarted(sessionStartTime);
+      localStorage.sessionStarted = sessionStartTime;
     }
+
     const newUnits = [...units, entry];
     setUnits(newUnits);
     localStorage.units = JSON.stringify(newUnits);
 
     const { milliLiter, alchP } = entry;
 
-    const newGrams = getGrams(milliLiter, alchP);
+    const newGrams = getGrams(parseInt(milliLiter), parseInt(alchP));
     setGrams(newGrams);
 
     localStorage.setItem("grams", newGrams);
