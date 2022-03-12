@@ -1,0 +1,8 @@
+.bodyweight__form label {
+  color: white;
+}
+
+.bodyweight__form {
+  display: flex;
+  justify-content: center;
+}

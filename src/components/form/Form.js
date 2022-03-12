@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AddUnit from "./AddUnit";
+import "./Form.css";
 
 const Form = ({ addUnit, saveBodyweight }) => {
   const [isReady, toggleIsReady] = useState(
@@ -23,7 +24,7 @@ const Form = ({ addUnit, saveBodyweight }) => {
     <>
       {!isReady && (
         <>
-          <form onSubmit={handleSubmit}>
+          <form className="bodyweight__form" onSubmit={handleSubmit}>
             <label htmlFor="bw">Vekt</label>
             <input
               id="bw"
@@ -32,8 +33,8 @@ const Form = ({ addUnit, saveBodyweight }) => {
               value={bodyweight}
               onChange={handleChange}
             />
+            <input type="submit" />
           </form>
-          <button onClick={handleSubmit}>Legg til vekt</button>
         </>
       )}
       {isReady && (

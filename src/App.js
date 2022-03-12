@@ -95,6 +95,7 @@ const App = () => {
     localStorage.removeItem("grams");
     localStorage.removeItem("bac");
     localStorage.removeItem("units");
+    localStorage.removeItem("bw");
   };
 
   return (

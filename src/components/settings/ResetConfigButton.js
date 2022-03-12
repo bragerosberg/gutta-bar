@@ -5,13 +5,12 @@ const ResetConfigButton = ({ resetDetails }) => {
     <>
       <button
         onClick={() => {
-          localStorage.removeItem("bw");
+          resetDetails();
           window.location.reload();
         }}
       >
         Remove config
       </button>
-      <button onClick={() => resetDetails()}>Reset BAC</button>
     </>
   );
 };

@@ -8,7 +8,7 @@
 - [X] Make the components semantic, split into own components
 - [] Remove config to also clear BAC and unit list
 - [X] Add custom assets
-- [] Possibility to add custom unit
+- [X] Possibility to add custom unit
 - [] Possibility to remove unit from units
 - [] Icons and images from,
 - [] History feature
