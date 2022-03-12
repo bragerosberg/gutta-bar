@@ -16,6 +16,19 @@ const Intro = () => {
   );
 };
 
+const ResetConfigButton = () => {
+  return (
+    <button
+      onClick={() => {
+        localStorage.removeItem("bw");
+        window.location.reload();
+      }}
+    >
+      Remove config
+    </button>
+  );
+};
+
 const App = () => {
   const [grams, setGrams] = useState(
     Number(JSON.parse(localStorage.getItem("grams")))
@@ -100,6 +113,7 @@ const App = () => {
     <div className="App">
       <Intro />
       <p>Promille {bac.toFixed(2)}</p>
+      <Form addUnit={addUnit} saveBodyweight={saveBodyweight} />
       <ul>
         {units.map((entry) => {
           console.log(entry);
@@ -112,7 +126,7 @@ const App = () => {
           );
         })}
       </ul>
-      <Form addUnit={addUnit} saveBodyweight={saveBodyweight} />
+      <ResetConfigButton />
       <br />
       <button onClick={() => resetDetails()}>Reset BAC</button>
     </div>

@@ -8,23 +8,14 @@ import format from "date-fns/format";
   - [X] Make bac decrease over time
   - [X] Localstorage of choices
   - [X] Add list of bac entries
-    - [] Add time of when it was added
+    - [X] Add time of when it was added
+  - [X] Units list to be below add 
+  - [] Possibility to add custom unit
+  - [] Possibility to remove unit from units
+  - [] Icons and images from, 
   - [] History feature
-    - See previous events, starttime & endtime
+    - [] See previous events, starttime & endtime
 */
-
-const ResetConfigButton = () => {
-  return (
-    <button
-      onClick={() => {
-        localStorage.removeItem("bw");
-        window.location.reload();
-      }}
-    >
-      Remove config
-    </button>
-  );
-};
 
 const AddUnit = ({ handleSubmit }) => {
   return (
@@ -101,7 +92,6 @@ const Form = ({ addUnit, saveBodyweight }) => {
           <p>Bodyweight {bodyweight} kg</p>
           <AddUnit handleSubmit={addUnit} />
           <br />
-          <ResetConfigButton />
         </>
       )}
     </>
