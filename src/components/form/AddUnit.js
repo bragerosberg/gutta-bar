@@ -140,7 +140,7 @@ const AddUnit = ({ handleSubmit }) => {
                   toggleAddActive(false);
                 }}
               >
-                <label htmlFor="name">Name</label>
+                <label htmlFor="name">Navn på drikken</label>
                 <input
                   id="name"
                   name="name"
@@ -156,7 +156,7 @@ const AddUnit = ({ handleSubmit }) => {
                   value={customUnitEntry.alchP}
                   onChange={handleChange}
                 />
-                <label htmlFor="milliLiter">Volume in ml</label>
+                <label htmlFor="milliLiter">Volum i milliliter</label>
                 <input
                   id="milliLiter"
                   name="milliLiter"
