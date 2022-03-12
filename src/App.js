@@ -10,7 +10,6 @@ import {
 } from "./config/config";
 import Intro from "./components/intro/Intro";
 import ResetConfigButton from "./components/settings/ResetConfigButton";
-import { parseISO } from "date-fns";
 
 const App = () => {
   const [grams, setGrams] = useState(
@@ -88,6 +87,27 @@ const App = () => {
     updateBac(milliLiter, alchP);
   };
 
+  const handleRemoveUnit = (entry) => {
+    const { id, milliLiter, alchP } = entry;
+    const newUnits = units.filter((unit) => unit.id !== id);
+    setUnits(newUnits);
+    localStorage.units = JSON.stringify(newUnits);
+
+    console.log("milliliter and alchP", milliLiter, alchP);
+
+    const gramsToRemove = parseInt(milliLiter) * (parseInt(alchP) / 100) * 0.8;
+    const newGrams = grams - gramsToRemove;
+    setGrams(newGrams);
+
+    const newBac =
+      newGrams / (bodyweight * BODY_DISTRIBUTION_PERCENTAGE) -
+      HOURLY_BURN_RATE * hoursDuration;
+
+    setBac(newBac);
+    console.log(newBac);
+    localStorage.setItem("bac", newBac);
+  };
+
   const resetDetails = () => {
     setBac(0);
     setGrams(0);
@@ -101,10 +121,10 @@ const App = () => {
   return (
     <div className="App">
       <Intro />
-      <BAC bac={bac} />
+      {sessionStarted && <BAC bac={bac} />}
       <Form addUnit={addUnit} saveBodyweight={saveBodyweight} />
-      <DisplayUnits units={units} />
-      <ResetConfigButton resetDetails={resetDetails} />
+      <DisplayUnits units={units} removeUnit={handleRemoveUnit} />
+      {sessionStarted && <ResetConfigButton resetDetails={resetDetails} />}
     </div>
   );
 };

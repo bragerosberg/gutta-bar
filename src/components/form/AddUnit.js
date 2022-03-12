@@ -94,7 +94,7 @@ const AddUnit = ({ handleSubmit }) => {
         <img src={vin} className="unitImage" alt="test" />
         Et glass vin
       </button>
-      <button onClick={() => toggleCustomUnit(true)}>
+      <button onClick={() => toggleCustomUnit(!customUnit)}>
         <img src={custom} className="unitImage" alt="test" />
         Annet
       </button>

@@ -4,12 +4,15 @@
 - [x] Add list of bac entries
   - [x] Add time of when it was added
 - [x] Units list to be below add
-- [X] Show ABV next to unit volume listing
-- [X] Make the components semantic, split into own components
-- [] Remove config to also clear BAC and unit list
-- [X] Add custom assets
-- [X] Possibility to add custom unit
+- [x] Show ABV next to unit volume listing
+- [x] Make the components semantic, split into own components
+- [x] Remove config to also clear BAC and unit list
+- [x] Add custom assets
+- [x] Possibility to add custom unit
 - [] Possibility to remove unit from units
-- [] Icons and images from,
+- [] Icons and images from Flaticon
+- [] Save history, and dont delete this on any clears
 - [] History feature
 - [] See previous events, starttime & endtime
+- [x] Clicking on "custom" again de-toggles it to make it hiddne
+- [] On remove unit, also update localStorage
