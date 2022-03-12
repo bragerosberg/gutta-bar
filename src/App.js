@@ -10,6 +10,7 @@ import {
 } from "./config/config";
 import Intro from "./components/intro/Intro";
 import ResetConfigButton from "./components/settings/ResetConfigButton";
+import settings from "./assets/settings.png";
 
 const App = () => {
   const [grams, setGrams] = useState(
@@ -25,6 +26,8 @@ const App = () => {
   );
   const [units, setUnits] = useState([]);
   const [config, setConfig] = useState();
+
+  const [showSettings, toggleShowSettings] = useState(false);
 
   const getGrams = (milliLiter, alchP) => {
     return grams + milliLiter * (alchP / 100) * 0.8;
@@ -132,11 +135,21 @@ const App = () => {
       {sessionStarted && <BAC bac={bac} />}
       <Form addUnit={addUnit} saveBodyweight={saveBodyweight} />
       <DisplayUnits units={units} removeUnit={handleRemoveUnit} />
+      <img
+        onClick={() => toggleShowSettings(!showSettings)}
+        className="settings"
+        src={settings}
+        alt="settings"
+      />
       {sessionStarted && (
-        <ResetConfigButton
-          resetDetails={resetDetails}
-          clearSession={clearSession}
-        />
+        <>
+          {showSettings && (
+            <ResetConfigButton
+              resetDetails={resetDetails}
+              clearSession={clearSession}
+            />
+          )}
+        </>
       )}
     </div>
   );

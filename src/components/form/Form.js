@@ -39,7 +39,6 @@ const Form = ({ addUnit, saveBodyweight }) => {
       )}
       {isReady && (
         <>
-          <p>Bodyweight {bodyweight} kg</p>
           <AddUnit handleSubmit={addUnit} />
           <br />
         </>

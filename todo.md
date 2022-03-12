@@ -11,8 +11,9 @@
 - [x] Possibility to add custom unit
 - [x] Possibility to remove unit from units
 - [x] Icons and images from Flaticon
-- [] Save history, and dont delete this on any clears
+- [x] Save history, and dont delete this on any clears
+- [x] Clicking on "custom" again de-toggles it to make it hiddne
+- [x] On remove unit, also update localStorage
+- [] Mobile responsive design
 - [] History feature
 - [] See previous events, starttime & endtime
-- [x] Clicking on "custom" again de-toggles it to make it hiddne
-- [] On remove unit, also update localStorage

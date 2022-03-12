@@ -1,5 +1,5 @@
 .unitImage {
-  width: 50px;
+  width: 150px;
 }
 
 .customUnit__form {
@@ -8,5 +8,65 @@
 }
 
 .customUnit__form label {
-  color: white;
+  color: #ffffff;
+}
+
+.unit__button {
+  background-color: #bb86fc;
+  color: #000000;
+  font-weight: 600;
+}
+
+.add__entry {
+  width: 65px;
+}
+
+.add__entry:hover {
+  cursor: pointer;
+}
+
+.customUnit__form,
+.customUnit__form button {
+  display: flex;
+  flex-direction: column;
+}
+
+.customUnit__form {
+  border: 2px solid #aeaeae;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 960px;
+}
+
+.customUnit__form input,
+select {
+  padding: 8px;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #2d3e50;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 4px;
+  width: auto;
+}
+
+.customUnit__form button {
+  text-align: center;
+  padding: 20px;
+  max-width: fit-content;
+  width: 100%;
+}
+
+.customUnit__form label {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  margin: 0;
+  font-weight: 550;
+  display: block;
+}
+
+.customUnit__form--submit {
+  background-color: #bb86fc;
 }

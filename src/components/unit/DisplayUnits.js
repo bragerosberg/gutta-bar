@@ -4,7 +4,7 @@ import "./DisplayUnit.css";
 
 const DisplayUnits = ({ units, removeUnit }) => {
   return (
-    <ul>
+    <ul className="ul">
       {units.map((entry) => {
         return (
           <li className="unit__list" key={entry.id}>
