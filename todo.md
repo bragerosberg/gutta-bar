@@ -6,7 +6,8 @@
 - [x] Units list to be below add
 - [X] Show ABV next to unit volume listing
 - [X] Make the components semantic, split into own components
-- [] Add custom assets
+- [] Remove config to also clear BAC and unit list
+- [X] Add custom assets
 - [] Possibility to add custom unit
 - [] Possibility to remove unit from units
 - [] Icons and images from,
