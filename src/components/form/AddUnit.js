@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import format from "date-fns/format";
 import custom from "../../assets/custom.png";
@@ -8,6 +8,31 @@ import vin from "../../assets/vin.png";
 import "./AddUnit.css";
 
 const AddUnit = ({ handleSubmit }) => {
+  const [customUnit, toggleCustomUnit] = useState(false);
+  const [customUnitEntry, setCustomUnitEntry] = useState({
+    milliLiter: 0,
+    alchP: 0,
+    name: "Skriv navn her",
+  });
+
+  const handleChange = ({ target }) => {
+    const { value, name } = target;
+    console.log(target);
+    switch (name) {
+      case "name":
+        setCustomUnitEntry({ ...customUnitEntry, name: value });
+        break;
+      case "milliLiter":
+        setCustomUnitEntry({ ...customUnitEntry, milliLiter: value });
+        break;
+      case "alchP":
+        setCustomUnitEntry({ ...customUnitEntry, alchP: value });
+        break;
+      default:
+        console.log("Category of submission is not supported");
+    }
+  };
+
   return (
     <div>
       <button
@@ -16,7 +41,7 @@ const AddUnit = ({ handleSubmit }) => {
             id: uuidv4(),
             milliLiter: 330,
             alchP: 4.7,
-            name: "0.33 shot",
+            name: "0.33 pils",
             time: format(new Date(), "HH:mm"),
             date: format(new Date(), "dd-MM-yyyy"),
           })
@@ -70,21 +95,53 @@ const AddUnit = ({ handleSubmit }) => {
         <img src={vin} className="unitImage" alt="test" />
         Et glass vin
       </button>
-      <button
-        onClick={() =>
-          handleSubmit({
-            id: uuidv4(),
-            milliLiter: 500,
-            alchP: 4.7,
-            name: "0.5 pils",
-            time: format(new Date(), "HH:mm"),
-            date: format(new Date(), "dd-MM-yyyy"),
-          })
-        }
-      >
+      <button onClick={() => toggleCustomUnit(true)}>
         <img src={custom} className="unitImage" alt="test" />
-        TODO: Custom
+        Annet
       </button>
+      {customUnit && (
+        <div>
+          <form
+            className="customUnit__form"
+            onSubmit={() =>
+              handleSubmit({
+                id: uuidv4(),
+                milliLiter: customUnitEntry.milliLiter,
+                alchP: customUnitEntry.alchP,
+                name: customUnitEntry.name,
+                time: format(new Date(), "HH:mm"),
+                date: format(new Date(), "dd-MM-yyyy"),
+              })
+            }
+          >
+            <label htmlFor="name">Name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              value={customUnitEntry.name}
+              onChange={handleChange}
+            />
+            <label htmlFor="alchP">Prosent</label>
+            <input
+              id="alchP"
+              name="alchP"
+              type="number"
+              value={customUnitEntry.alchP}
+              onChange={handleChange}
+            />
+            <label htmlFor="milliLiter">Volume in ml</label>
+            <input
+              id="milliLiter"
+              name="milliLiter"
+              type="number"
+              value={customUnitEntry.milliLiter}
+              onChange={handleChange}
+            />
+            <input type="submit" />
+          </form>
+        </div>
+      )}
     </div>
   );
 };

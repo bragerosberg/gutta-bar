@@ -1,3 +1,12 @@
 .unitImage {
   width: 50px;
 }
+
+.customUnit__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.customUnit__form label {
+  color: white;
+}
