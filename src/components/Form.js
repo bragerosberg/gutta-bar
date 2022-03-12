@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import format from "date-fns/format";
 
 // TODO
 /* 
   - [X] Add option to clear bac
   - [X] Make bac decrease over time
-  - [] Localstorage of choices
+  - [X] Localstorage of choices
   - [X] Add list of bac entries
     - [] Add time of when it was added
   - [] History feature
@@ -35,6 +36,8 @@ const AddUnit = ({ handleSubmit }) => {
             milliLiter: 330,
             alchP: 4.7,
             name: "0.33 pils",
+            time: format(new Date(), "hh:mm"),
+            date: format(new Date(), "dd-MM-yyyy"),
           })
         }
       >
@@ -47,6 +50,8 @@ const AddUnit = ({ handleSubmit }) => {
             milliLiter: 500,
             alchP: 4.7,
             name: "0.5 pils",
+            time: format(new Date(), "hh:mm"),
+            date: format(new Date(), "dd-MM-yyyy"),
           })
         }
       >

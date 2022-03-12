@@ -66,7 +66,7 @@ const App = () => {
 
       if (bac <= 0) clearInterval(session);
 
-      return () => clearInterval(session); //This is important
+      return () => clearInterval(session);
     }
   }, [sessionStarted, bac, bodyweight, grams]);
 
@@ -105,7 +105,9 @@ const App = () => {
           console.log(entry);
           return (
             <li key={entry.id}>
-              <p>{entry.name}</p>
+              <p>
+                {entry.name} - {entry.time}
+              </p>
             </li>
           );
         })}
