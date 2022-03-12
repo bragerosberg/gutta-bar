@@ -1,11 +1,15 @@
 import React, { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 // TODO
 /* 
   - [X] Add option to clear bac
   - [X] Make bac decrease over time
-  - [] Add list of bac entries
+  - [] Localstorage of choices
+  - [X] Add list of bac entries
     - [] Add time of when it was added
+  - [] History feature
+    - See previous events, starttime & endtime
 */
 
 const ResetConfigButton = () => {
@@ -24,10 +28,28 @@ const ResetConfigButton = () => {
 const AddUnit = ({ handleSubmit }) => {
   return (
     <div>
-      <button onClick={() => handleSubmit({ milliLiter: 330, alchP: 4.7 })}>
+      <button
+        onClick={() =>
+          handleSubmit({
+            id: uuidv4(),
+            milliLiter: 330,
+            alchP: 4.7,
+            name: "0.33 pils",
+          })
+        }
+      >
         Add 330ml beer
       </button>
-      <button onClick={() => handleSubmit({ milliLiter: 330, alchP: 4.7 })}>
+      <button
+        onClick={() =>
+          handleSubmit({
+            id: uuidv4(),
+            milliLiter: 500,
+            alchP: 4.7,
+            name: "0.5 pils",
+          })
+        }
+      >
         Add 500ml beer
       </button>
     </div>

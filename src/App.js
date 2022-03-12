@@ -17,23 +17,20 @@ const Intro = () => {
 };
 
 const App = () => {
-  const [grams, setGrams] = useState(0);
-  const [bac, setBac] = useState(localStorage.getItem("bac") | "0%");
+  const [grams, setGrams] = useState(
+    Number(JSON.parse(localStorage.getItem("grams")))
+  );
+  const [bac, setBac] = useState(Number(localStorage.getItem("bac")));
   const [sessionStarted, setSessionStarted] = useState(bac > 0);
   const [hoursDuration, setHoursDuration] = useState(0);
   const [bodyweight, saveBodyweight] = useState(
     Number(JSON.parse(localStorage.getItem("bw")))
   );
+  const [units, setUnits] = useState([]);
 
   const getGrams = (milliLiter, alchP) => {
     return grams + milliLiter * (alchP / 100) * 0.8;
   };
-  /*
-    Alkohol i gram (dl * Vol% * 0,8)/ (kroppsvekten i kg * X %) – (Y * timer fra drikkestart) = promille
-
-    X/bdp = woman ? 55% : 65%
-    Y/hbr = 0.15
-  */
 
   const updateBac = (milliLiter, alchP) => {
     const newBac = calculateAbv(milliLiter, alchP, bodyweight).toFixed(3);
@@ -50,38 +47,69 @@ const App = () => {
 
   useEffect(() => {
     if (bac > 0) {
+      if (units && units.length < 1) {
+        setUnits(JSON.parse(localStorage.getItem("units")));
+      }
       const session = setInterval(() => {
         const newHoursDuration =
           differenceInSeconds(new Date(), sessionStarted) / 3600;
         setHoursDuration(newHoursDuration);
-        setBac(
+
+        const newBac =
           grams / (bodyweight * BODY_DISTRIBUTION_PERCENTAGE) -
-            HOURLY_BURN_RATE * newHoursDuration
-        );
+          HOURLY_BURN_RATE * newHoursDuration;
+
+        localStorage.setItem("bac", newBac);
+
+        setBac(newBac);
       }, 300000);
+
+      if (bac <= 0) clearInterval(session);
 
       return () => clearInterval(session); //This is important
     }
-  }, [sessionStarted]);
+  }, [sessionStarted, bac, bodyweight, grams]);
 
   const addUnit = (entry) => {
     if (!sessionStarted) {
       setSessionStarted(new Date());
     }
+    const newUnits = [...units, entry];
+    setUnits(newUnits);
+    localStorage.units = JSON.stringify(newUnits);
+
     const { milliLiter, alchP } = entry;
-    setGrams(getGrams(milliLiter, alchP));
+
+    const newGrams = getGrams(milliLiter, alchP);
+    setGrams(newGrams);
+
+    localStorage.setItem("grams", newGrams);
     updateBac(milliLiter, alchP);
   };
 
   const resetDetails = () => {
     setBac(0);
     setGrams(0);
+    setUnits([]);
+    localStorage.removeItem("grams");
+    localStorage.removeItem("bac");
+    localStorage.removeItem("units");
   };
 
   return (
     <div className="App">
       <Intro />
       <p>Promille {bac.toFixed(2)}</p>
+      <ul>
+        {units.map((entry) => {
+          console.log(entry);
+          return (
+            <li key={entry.id}>
+              <p>{entry.name}</p>
+            </li>
+          );
+        })}
+      </ul>
       <Form addUnit={addUnit} saveBodyweight={saveBodyweight} />
       <br />
       <button onClick={() => resetDetails()}>Reset BAC</button>
