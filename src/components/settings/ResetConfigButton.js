@@ -1,6 +1,6 @@
 import React from "react";
 
-const ResetConfigButton = ({ resetDetails }) => {
+const ResetConfigButton = ({ resetDetails, clearSession }) => {
   return (
     <>
       <button
@@ -10,6 +10,13 @@ const ResetConfigButton = ({ resetDetails }) => {
         }}
       >
         Remove config
+      </button>
+      <button
+        onClick={() => {
+          clearSession();
+        }}
+      >
+        Reset session
       </button>
     </>
   );

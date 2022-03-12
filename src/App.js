@@ -24,6 +24,7 @@ const App = () => {
     Number(JSON.parse(localStorage.getItem("bw")))
   );
   const [units, setUnits] = useState([]);
+  const [config, setConfig] = useState();
 
   const getGrams = (milliLiter, alchP) => {
     return grams + milliLiter * (alchP / 100) * 0.8;
@@ -74,6 +75,12 @@ const App = () => {
       localStorage.sessionStarted = sessionStartTime;
     }
 
+    setConfig({
+      units: [...units, entry],
+    });
+
+    localStorage.setItem("config", config);
+
     const newUnits = [...units, entry];
     setUnits(newUnits);
     localStorage.units = JSON.stringify(newUnits);
@@ -93,8 +100,6 @@ const App = () => {
     setUnits(newUnits);
     localStorage.units = JSON.stringify(newUnits);
 
-    console.log("milliliter and alchP", milliLiter, alchP);
-
     const gramsToRemove = parseInt(milliLiter) * (parseInt(alchP) / 100) * 0.8;
     const newGrams = grams - gramsToRemove;
     setGrams(newGrams);
@@ -103,18 +108,21 @@ const App = () => {
       newGrams / (bodyweight * BODY_DISTRIBUTION_PERCENTAGE) -
       HOURLY_BURN_RATE * hoursDuration;
 
-    setBac(newBac);
-    console.log(newBac);
+    setBac(Math.abs(newBac));
     localStorage.setItem("bac", newBac);
   };
 
-  const resetDetails = () => {
+  const clearSession = () => {
     setBac(0);
     setGrams(0);
     setUnits([]);
     localStorage.removeItem("grams");
     localStorage.removeItem("bac");
     localStorage.removeItem("units");
+  };
+
+  const resetDetails = () => {
+    clearSession();
     localStorage.removeItem("bw");
   };
 
@@ -124,7 +132,12 @@ const App = () => {
       {sessionStarted && <BAC bac={bac} />}
       <Form addUnit={addUnit} saveBodyweight={saveBodyweight} />
       <DisplayUnits units={units} removeUnit={handleRemoveUnit} />
-      {sessionStarted && <ResetConfigButton resetDetails={resetDetails} />}
+      {sessionStarted && (
+        <ResetConfigButton
+          resetDetails={resetDetails}
+          clearSession={clearSession}
+        />
+      )}
     </div>
   );
 };

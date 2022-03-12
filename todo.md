@@ -9,8 +9,8 @@
 - [x] Remove config to also clear BAC and unit list
 - [x] Add custom assets
 - [x] Possibility to add custom unit
-- [] Possibility to remove unit from units
-- [] Icons and images from Flaticon
+- [x] Possibility to remove unit from units
+- [x] Icons and images from Flaticon
 - [] Save history, and dont delete this on any clears
 - [] History feature
 - [] See previous events, starttime & endtime
