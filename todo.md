@@ -1,0 +1,14 @@
+- [x] Add option to clear bac
+- [x] Make bac decrease over time
+- [x] Localstorage of choices
+- [x] Add list of bac entries
+  - [x] Add time of when it was added
+- [x] Units list to be below add
+- [X] Show ABV next to unit volume listing
+- [X] Make the components semantic, split into own components
+- [] Add custom assets
+- [] Possibility to add custom unit
+- [] Possibility to remove unit from units
+- [] Icons and images from,
+- [] History feature
+- [] See previous events, starttime & endtime

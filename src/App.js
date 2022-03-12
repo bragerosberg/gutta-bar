@@ -1,33 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import logo from "./assets/logo.png";
-import Form from "./components/Form";
+import Form from "./components/form/Form";
 import differenceInSeconds from "date-fns/differenceInSeconds";
-
-const BODY_DISTRIBUTION_PERCENTAGE = 0.65;
-const HOURLY_BURN_RATE = 0.15;
-
-const Intro = () => {
-  return (
-    <section>
-      <p>Gutta Bar</p>
-      <img className="App-logo" src={logo} alt="gutta" />
-    </section>
-  );
-};
-
-const ResetConfigButton = () => {
-  return (
-    <button
-      onClick={() => {
-        localStorage.removeItem("bw");
-        window.location.reload();
-      }}
-    >
-      Remove config
-    </button>
-  );
-};
+import BAC from "./components/bac/BAC";
+import DisplayUnits from "./components/unit/DisplayUnits";
+import {
+  BODY_DISTRIBUTION_PERCENTAGE,
+  HOURLY_BURN_RATE,
+} from "./config/config";
+import Intro from "./components/intro/Intro";
+import ResetConfigButton from "./components/settings/ResetConfigButton";
 
 const App = () => {
   const [grams, setGrams] = useState(
@@ -112,23 +94,10 @@ const App = () => {
   return (
     <div className="App">
       <Intro />
-      <p>Promille {bac.toFixed(2)}</p>
+      <BAC bac={bac} />
       <Form addUnit={addUnit} saveBodyweight={saveBodyweight} />
-      <ul>
-        {units.map((entry) => {
-          console.log(entry);
-          return (
-            <li key={entry.id}>
-              <p>
-                {entry.name} - {entry.time}
-              </p>
-            </li>
-          );
-        })}
-      </ul>
-      <ResetConfigButton />
-      <br />
-      <button onClick={() => resetDetails()}>Reset BAC</button>
+      <DisplayUnits units={units} />
+      <ResetConfigButton resetDetails={resetDetails} />
     </div>
   );
 };
