@@ -111,7 +111,11 @@ const App = () => {
       newGrams / (bodyweight * BODY_DISTRIBUTION_PERCENTAGE) -
       HOURLY_BURN_RATE * hoursDuration;
 
-    setBac(Math.abs(newBac));
+    if (units.length <= 1) {
+      setBac(0);
+    } else {
+      setBac(Math.abs(newBac));
+    }
     localStorage.setItem("bac", newBac);
   };
 

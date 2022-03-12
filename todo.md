@@ -14,6 +14,7 @@
 - [x] Save history, and dont delete this on any clears
 - [x] Clicking on "custom" again de-toggles it to make it hiddne
 - [x] On remove unit, also update localStorage
-- [] Mobile responsive design
+- [X] Mobile responsive design
+- [] Option to add custom time
 - [] History feature
 - [] See previous events, starttime & endtime

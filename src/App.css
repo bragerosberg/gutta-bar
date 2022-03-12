@@ -3,6 +3,26 @@
 body {
   background-color: #121212;
   font-family: "Open Sans", sans-serif;
+  overflow: hidden;
+}
+
+body {
+  background: linear-gradient(-45deg, #33273b, #4d2f3b, #354950, #061411);
+  background-size: 400% 400%;
+  animation: gradient 45s ease infinite;
+  height: 100vh;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .App {
@@ -19,7 +39,7 @@ body {
 }
 
 .settings {
-  width: 25px;
+  width: 50px;
   position: absolute;
   top: 5px;
   right: 5px;

@@ -4,7 +4,12 @@ import logo from "../../assets/logo.png";
 const Intro = () => {
   return (
     <section>
-      <img className="App-logo" src={logo} alt="gutta" />
+      <img
+        style={{ marginTop: 15, borderRadius: 5 }}
+        className="App-logo"
+        src={logo}
+        alt="gutta"
+      />
     </section>
   );
 };

@@ -1,24 +1,29 @@
 import React from "react";
+import reset from "../../assets/reset.png";
+import stop from "../../assets/stop.png";
+import "./ResetConfigButton.css";
 
 const ResetConfigButton = ({ resetDetails, clearSession }) => {
   return (
-    <>
-      <button
+    <div style={{ position: "absolute", bottom: 0 }}>
+      <img
+        className="remove__button"
+        src={stop}
+        alt="stop"
         onClick={() => {
           resetDetails();
           window.location.reload();
         }}
-      >
-        Remove config
-      </button>
-      <button
+      />
+      <img
+        className="reset__button"
+        src={reset}
+        alt="reset"
         onClick={() => {
           clearSession();
         }}
-      >
-        Reset session
-      </button>
-    </>
+      />
+    </div>
   );
 };
 
