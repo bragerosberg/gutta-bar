@@ -14,7 +14,11 @@
 - [x] Save history, and dont delete this on any clears
 - [x] Clicking on "custom" again de-toggles it to make it hiddne
 - [x] On remove unit, also update localStorage
-- [X] Mobile responsive design
-- [] Option to add custom time
+- [x] Mobile responsive design
+- [] add previous
+- [] Option to add custom time to event
+- [] When selecting unit, open form with defined sets -> allow for scrolling on percent, volume and alchp
 - [] History feature
 - [] See previous events, starttime & endtime
+- [] På initial load etter session, sørg for å resette BAC til 0
+- [] Gradient background based on BAC: 0->0.5 purple, 0.5->1 green, 1+ red

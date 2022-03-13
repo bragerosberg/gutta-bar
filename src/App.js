@@ -11,6 +11,8 @@ import {
 import Intro from "./components/intro/Intro";
 import ResetConfigButton from "./components/settings/ResetConfigButton";
 import settings from "./assets/settings.png";
+import isBefore from "date-fns/isBefore";
+import toDate from "date-fns/toDate";
 
 const App = () => {
   const [grams, setGrams] = useState(
@@ -61,9 +63,8 @@ const App = () => {
           HOURLY_BURN_RATE * newHoursDuration;
 
         localStorage.setItem("bac", newBac);
-
         setBac(newBac);
-      }, 300000);
+      }, 10000);
 
       if (bac <= 0) clearInterval(session);
 
@@ -89,12 +90,34 @@ const App = () => {
     localStorage.units = JSON.stringify(newUnits);
 
     const { milliLiter, alchP } = entry;
-
     const newGrams = getGrams(parseInt(milliLiter), parseInt(alchP));
-    setGrams(newGrams);
 
-    localStorage.setItem("grams", newGrams);
-    updateBac(milliLiter, alchP);
+    console.log(entry.time, toDate(sessionStarted));
+    console.log(isBefore(entry.time, toDate(sessionStarted)));
+
+    if (isBefore(entry.time, toDate(sessionStarted))) {
+      // Entry is before session start
+
+      /*
+      1 Tell gram på entry
+      2 Remove gram på entry basert på tiden fra  entry.time og sessionstarted
+      3 Append gram og bac dersom det er noe tilgjengelig som ikke er brent
+       */
+      console.log("inside");
+      // const newHoursDuration =
+      //   differenceInSeconds(entry.time, new Date()) / 3600;
+      // console.log(newHoursDuration, "nwh");
+      // const gramsBurned =
+      //   newGrams / (bodyweight * BODY_DISTRIBUTION_PERCENTAGE) -
+      //   HOURLY_BURN_RATE * newHoursDuration;
+
+      // setHoursDuration(newHoursDuration);
+    } else {
+      setGrams(newGrams);
+
+      localStorage.setItem("grams", newGrams);
+      updateBac(milliLiter, alchP);
+    }
   };
 
   const handleRemoveUnit = (entry) => {

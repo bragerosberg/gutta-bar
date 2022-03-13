@@ -15,6 +15,7 @@ const AddUnit = ({ handleSubmit }) => {
     milliLiter: 0,
     alchP: 0,
     name: "Skriv navn her",
+    time: new Date(),
   });
 
   const handleChange = ({ target }) => {
@@ -28,6 +29,9 @@ const AddUnit = ({ handleSubmit }) => {
         break;
       case "alchP":
         setCustomUnitEntry({ ...customUnitEntry, alchP: value });
+        break;
+      case "time":
+        setCustomUnitEntry({ ...customUnitEntry, time: value });
         break;
       default:
         console.log("Category of submission is not supported");
@@ -134,8 +138,8 @@ const AddUnit = ({ handleSubmit }) => {
                     milliLiter: customUnitEntry.milliLiter,
                     alchP: customUnitEntry.alchP,
                     name: customUnitEntry.name,
-                    time: format(new Date(), "HH:mm"),
-                    date: format(new Date(), "dd-MM-yyyy"),
+                    time: customUnitEntry.time,
+                    date: new Date(),
                   });
                   toggleAddActive(false);
                 }}
@@ -164,6 +168,13 @@ const AddUnit = ({ handleSubmit }) => {
                   value={customUnitEntry.milliLiter}
                   onChange={handleChange}
                 />
+                <label htmlFor="time">Tidspunkt</label>
+                <input
+                  type="time"
+                  name="time"
+                  value={customUnitEntry.time}
+                  onChange={handleChange}
+                ></input>
                 <input className="customUnit__form--submit" type="submit" />
               </form>
             </div>
