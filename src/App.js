@@ -1,182 +1,204 @@
-import React, { useState, useEffect } from "react";
 import "./App.css";
-import Form from "./components/form/Form";
-import differenceInSeconds from "date-fns/differenceInSeconds";
-import BAC from "./components/bac/BAC";
-import DisplayUnits from "./components/unit/DisplayUnits";
+import "./AddUnit.css";
+import React, { useState, useEffect } from "react";
+import moment from "moment";
+
+import AddUnit from "./components/AddUnit";
+import ResetWeight from "./components/ResetWeight";
+import WeightForm from "./components/WeightForm";
+
 import {
-  BODY_DISTRIBUTION_PERCENTAGE,
-  HOURLY_BURN_RATE,
-} from "./config/config";
-import Intro from "./components/intro/Intro";
-import ResetConfigButton from "./components/settings/ResetConfigButton";
-import settings from "./assets/settings.png";
-import isBefore from "date-fns/isBefore";
-import toDate from "date-fns/toDate";
+  saveKeyToLocalStorage,
+  getKeyFromLocalStorage,
+  updateUnitsToLatestTenHours,
+  getPromille,
+  getGrams,
+} from "./utils";
+import DisplayUnits from "./components/DisplayUnits";
+import SessionOption from "./components/SessionOption";
+
+/**
+ *
+ * On landing page, after entering body weight, a session shall be selected
+ * Render sessions that are on DD-MM-YYYY or DD-MM-YYYY -1 DD
+ * Admin can create sessions
+ */
+
+// localStorage.clear();
 
 const App = () => {
-  const [grams, setGrams] = useState(
-    Number(JSON.parse(localStorage.getItem("grams")))
-  );
-  const [bac, setBac] = useState(Number(localStorage.getItem("bac")));
-  const [sessionStarted, setSessionStarted] = useState(
-    bac > 0 ? Date.parse(localStorage.getItem("sessionStarted")) : false
-  );
-  const [hoursDuration, setHoursDuration] = useState(0);
-  const [bodyweight, saveBodyweight] = useState(
-    Number(JSON.parse(localStorage.getItem("bw")))
-  );
-  const [units, setUnits] = useState([]);
-  const [config, setConfig] = useState();
+  const [input, updateInput] = useState();
+  const [showUnitForm, toggleShowUnitForm] = useState(false);
 
-  const [showSettings, toggleShowSettings] = useState(false);
+  const [editSession, toggleEditSession] = useState(false);
 
-  const getGrams = (milliLiter, alchP) => {
-    return grams + milliLiter * (alchP / 100) * 0.8;
+  // const [promille, updatePromille] = useState(0);
+  // const [weight, setWeight] = useState(getKeyFromLocalStorage("weight"));
+  // const [units, updateUnits] = useState(
+  //   JSON.parse(getKeyFromLocalStorage("units") || "[]")
+  // );
+  const userId = "Brage";
+
+  const [participant, updateParticipant] = useState({
+    name: userId,
+    img: "https://media-exp1.licdn.com/dms/image/C4D03AQEkekboMDFH-A/profile-displayphoto-shrink_200_200/0/1647851404608?e=1659571200&v=beta&t=wWdnu8p9ZmRQT8PhgLGToclqvMfz4BmSzoSxVt6uh1g",
+    units: JSON.parse(getKeyFromLocalStorage("units") || "[]"),
+    promille: 0,
+    weight: getKeyFromLocalStorage("weight"),
+  });
+
+  const [sessions, updateSessions] = useState(
+    JSON.parse(getKeyFromLocalStorage("sessions") || "[]")
+  );
+  const [selectedSession, updatedSelectedSession] = useState();
+
+  const dateToday = moment(new Date()).format("DD-MM-yyyy");
+
+  const getTotalGram = () => {
+    let gramAcc = 0;
+    participant?.units.forEach(
+      (unit) => (gramAcc += getGrams(unit?.cl, unit?.percentage))
+    );
+    return gramAcc.toFixed(3);
   };
 
-  const updateBac = (milliLiter, alchP) => {
-    const newBac = calculateAbv(milliLiter, alchP, bodyweight).toFixed(3);
-    setBac(calculateAbv(milliLiter, alchP, bodyweight));
-    localStorage.setItem("bac", newBac);
-  };
-
-  const calculateAbv = (milliLiter, alchP, bw) => {
+  const getSessionLengthInHours = () => {
     return (
-      getGrams(milliLiter, alchP) / (bw * BODY_DISTRIBUTION_PERCENTAGE) -
-      HOURLY_BURN_RATE * hoursDuration
+      moment().diff(
+        moment(participant?.units[0]?.time?.time, "HH:mm"),
+        "minutes"
+      ) / 60
     );
   };
 
   useEffect(() => {
-    if (bac > 0) {
-      if (units && units.length < 1) {
-        setUnits(JSON.parse(localStorage.getItem("units")));
-      }
-      const session = setInterval(() => {
-        const newHoursDuration =
-          differenceInSeconds(new Date(), sessionStarted) / 3600;
-        setHoursDuration(newHoursDuration);
+    // Attempt fetching session
+    const sessionFromLocalStorage = JSON.parse(
+      getKeyFromLocalStorage("session") || "{}"
+    );
+    const sessionAlreadyToday =
+      sessionFromLocalStorage?.date?.substring(0, 10) === dateToday;
+    if (sessionAlreadyToday) updatedSelectedSession(sessionFromLocalStorage);
 
-        const newBac =
-          grams / (bodyweight * BODY_DISTRIBUTION_PERCENTAGE) -
-          HOURLY_BURN_RATE * newHoursDuration;
-
-        localStorage.setItem("bac", newBac);
-        setBac(newBac);
-      }, 10000);
-
-      if (bac <= 0) clearInterval(session);
-
-      return () => clearInterval(session);
-    }
-  }, [sessionStarted, bac, bodyweight, grams]);
-
-  const addUnit = (entry) => {
-    if (!sessionStarted) {
-      const sessionStartTime = new Date();
-      setSessionStarted(sessionStartTime);
-      localStorage.sessionStarted = sessionStartTime;
-    }
-
-    setConfig({
-      units: [...units, entry],
+    // Update units to be last 10 hours
+    updateParticipant({
+      ...participant,
+      units: updateUnitsToLatestTenHours(participant?.units, moment),
     });
 
-    localStorage.setItem("config", config);
+    // Calculate promille
+    const totalGrams = getTotalGram();
+    const sesstionDurationInhours = getSessionLengthInHours();
+    updateParticipant({
+      ...participant,
+      promille: getPromille(
+        totalGrams,
+        participant?.weight,
+        sesstionDurationInhours
+      ),
+    });
+  }, []);
 
-    const newUnits = [...units, entry];
-    setUnits(newUnits);
-    localStorage.units = JSON.stringify(newUnits);
+  const handleUnitUpdate = (newUnit) => {
+    const newUnits = updateUnitsToLatestTenHours(
+      [...participant?.units, newUnit],
+      moment
+    );
+    saveKeyToLocalStorage("units", JSON.stringify(newUnits));
+    updateParticipant({ ...participant, units: newUnits });
+  };
 
-    const { milliLiter, alchP } = entry;
-    const newGrams = getGrams(parseInt(milliLiter), parseInt(alchP));
+  const handleSessionCreate = () => {
+    const firstSessionOfDay = sessions.map((session) => {
+      return session?.date.includes(selectedSession);
+    }).length;
 
-    console.log(entry.time, toDate(sessionStarted));
-    console.log(isBefore(entry.time, toDate(sessionStarted)));
-
-    if (isBefore(entry.time, toDate(sessionStarted))) {
-      // Entry is before session start
-
-      /*
-      1 Tell gram på entry
-      2 Remove gram på entry basert på tiden fra  entry.time og sessionstarted
-      3 Append gram og bac dersom det er noe tilgjengelig som ikke er brent
-       */
-      console.log("inside");
-      // const newHoursDuration =
-      //   differenceInSeconds(entry.time, new Date()) / 3600;
-      // console.log(newHoursDuration, "nwh");
-      // const gramsBurned =
-      //   newGrams / (bodyweight * BODY_DISTRIBUTION_PERCENTAGE) -
-      //   HOURLY_BURN_RATE * newHoursDuration;
-
-      // setHoursDuration(newHoursDuration);
-    } else {
-      setGrams(newGrams);
-
-      localStorage.setItem("grams", newGrams);
-      updateBac(milliLiter, alchP);
+    if (firstSessionOfDay.length === 0) {
+      const newSession = { date: dateToday, participants: [] };
+      updateSessions([...sessions, newSession]);
+      updatedSelectedSession(newSession);
+      saveKeyToLocalStorage("session", JSON.stringify(newSession));
+      saveKeyToLocalStorage(
+        "sessions",
+        JSON.stringify([...sessions, newSession])
+      );
+      toggleEditSession(false);
+      return;
     }
-  };
-
-  const handleRemoveUnit = (entry) => {
-    const { id, milliLiter, alchP } = entry;
-    const newUnits = units.filter((unit) => unit.id !== id);
-    setUnits(newUnits);
-    localStorage.units = JSON.stringify(newUnits);
-
-    const gramsToRemove = parseInt(milliLiter) * (parseInt(alchP) / 100) * 0.8;
-    const newGrams = grams - gramsToRemove;
-    setGrams(newGrams);
-
-    const newBac =
-      newGrams / (bodyweight * BODY_DISTRIBUTION_PERCENTAGE) -
-      HOURLY_BURN_RATE * hoursDuration;
-
-    if (units.length <= 1) {
-      setBac(0);
-    } else {
-      setBac(Math.abs(newBac));
-    }
-    localStorage.setItem("bac", newBac);
-  };
-
-  const clearSession = () => {
-    setBac(0);
-    setGrams(0);
-    setUnits([]);
-    localStorage.removeItem("grams");
-    localStorage.removeItem("bac");
-    localStorage.removeItem("units");
-  };
-
-  const resetDetails = () => {
-    clearSession();
-    localStorage.removeItem("bw");
+    const newSession = {
+      date: `${dateToday}-${firstSessionOfDay}`,
+      participants: [],
+    };
+    saveKeyToLocalStorage("session", JSON.stringify(newSession));
+    saveKeyToLocalStorage(
+      "sessions",
+      JSON.stringify([...sessions, newSession])
+    );
+    updatedSelectedSession(newSession);
+    toggleEditSession(false);
   };
 
   return (
     <div className="App">
-      <Intro />
-      {sessionStarted && <BAC bac={bac} />}
-      <Form addUnit={addUnit} saveBodyweight={saveBodyweight} />
-      <DisplayUnits units={units} removeUnit={handleRemoveUnit} />
-      <img
-        onClick={() => toggleShowSettings(!showSettings)}
-        className="settings"
-        src={settings}
-        alt="settings"
-      />
-      {sessionStarted && (
-        <>
-          {showSettings && (
-            <ResetConfigButton
-              resetDetails={resetDetails}
-              clearSession={clearSession}
-            />
+      {!participant?.weight && (
+        <WeightForm
+          weight={participant?.weight}
+          input={input}
+          updateInput={updateInput}
+          updateParticipant={updateParticipant}
+          participant={participant}
+        />
+      )}
+      {participant?.weight && (!selectedSession || editSession) && (
+        <div>
+          <p>Session not selected</p>
+          <p>Join a session or ask admin to create one</p>
+          {sessions.map((session) => {
+            return (
+              <SessionOption
+                key={session.date}
+                session={session}
+                updateSession={updatedSelectedSession}
+                toggleEditSession={toggleEditSession}
+              />
+            );
+          })}
+          <br />
+          <br />
+          <button onClick={handleSessionCreate}>
+            Create new for {dateToday}
+          </button>
+        </div>
+      )}
+      {participant?.weight && selectedSession && !editSession && (
+        <div>
+          <h1>{selectedSession?.date}</h1>
+          {!editSession && (
+            <button onClick={() => toggleEditSession(true)}>
+              Go to session overview
+            </button>
           )}
-        </>
+          {participant?.weight}kg
+          <AddUnit
+            showUnitForm={showUnitForm}
+            toggleShowUnitForm={toggleShowUnitForm}
+            handleUnitUpdate={handleUnitUpdate}
+          />
+          <ResetWeight />
+          <br />
+          <button
+            onClick={() => {
+              localStorage.removeItem("units");
+              window.location.reload();
+            }}
+          >
+            Clear units localstorage
+          </button>
+          <br />
+          <br />
+          <DisplayUnits units={participant?.units} />
+          <h1>Promille {participant?.promille}</h1>
+        </div>
       )}
     </div>
   );

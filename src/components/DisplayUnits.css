@@ -1,0 +1,12 @@
+.units__display {
+  display: flex;
+  overflow-x: scroll;
+}
+
+.units__display--unit-illustration {
+  width: 25px;
+}
+
+.units__display--unit {
+  padding: 20px;
+} 

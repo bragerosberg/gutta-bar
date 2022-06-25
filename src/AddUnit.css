@@ -1,0 +1,22 @@
+.AddUnit {
+  padding: 20px;
+  border-radius: 100px;
+}
+
+.AddUnit:hover {
+  cursor: pointer;
+}
+
+.topContainer {
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  margin: 10px;
+}
+
+
+.illustrationImage {
+  margin: 0 25px 0;
+  width: 100px;
+}
