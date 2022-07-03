@@ -76,7 +76,6 @@ const ValueOptions = ({
               : "notSelected"
           }
         >
-          <p>{day}</p>
           <Value
             key={`${time}${day}`}
             value={nickname === "Nå" ? nickname : time}

@@ -1,0 +1,51 @@
+html {
+  /* concrete */
+  background-color: #F9F9F9; 
+}
+
+.profile__picture {
+  width: 200px;
+}
+
+
+.user__displays {
+  display: flex;
+  overflow-x: scroll;
+}
+
+.promille {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  margin: 0 auto;
+  margin-top: 20px;
+  height: 250px;
+  width: 250px;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 50%;
+  /* may require vendor prefixes */
+  background: #2F5D8C;
+  color: white;
+  font-size: 50px;
+}
+
+
+.add__unit {
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    margin: 0 auto;
+    margin-top: -20px;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 50%;
+    /* may require vendor prefixes */
+    background: #D55E2D;
+    color: white;
+    font-size: 50px;
+}

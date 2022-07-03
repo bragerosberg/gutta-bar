@@ -1,6 +1,8 @@
 .units__display {
   display: flex;
   overflow-x: scroll;
+  background-color: #2f5d8c;
+  color: white;
 }
 
 .units__display--unit-illustration {
@@ -9,4 +11,11 @@
 
 .units__display--unit {
   padding: 20px;
-} 
+}
+
+.units__edit {
+  position: fixed;
+  right: 0;
+  padding-right: 20px;
+  margin: 8px 0 0 0;
+}

@@ -1,0 +1,15 @@
+.primaryButton {
+  padding: 8px 10px;
+  margin: 5px;
+
+  background-color: transparent;
+
+  border-color: black;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
+.primaryButton:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}

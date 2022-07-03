@@ -3,6 +3,9 @@ import React, { useState } from "react";
 
 import UnitDrink from "./UnitDrink";
 import ValueOptions from "./value/ValueOptions";
+import Button from "./Button";
+import { colorPalette } from "../theme";
+import "./AddUnit.css";
 
 import {
   minutes,
@@ -28,12 +31,7 @@ const unitOptions = [
   { name: "custom", src: custom },
 ];
 
-const AddUnit = ({
-  showUnitForm,
-  toggleShowUnitForm,
-  handleUnitUpdate,
-  session,
-}) => {
+const AddUnit = ({ handleUnitUpdate }) => {
   const [activeUnit, setActiveUnit] = useState("pils");
   const [activeCl, setActiveCl] = useState(50);
   const [activePercentage, setActivePercentage] = useState(4);
@@ -62,13 +60,6 @@ const AddUnit = ({
     return true;
   };
 
-  if (showUnitForm)
-    return (
-      <button className="AddUnit" onClick={toggleShowUnitForm}>
-        +
-      </button>
-    );
-
   const setDefaultValuesOnUnit = ({ cl, percentage }) => {
     setActiveCl(cl);
     setActivePercentage(percentage);
@@ -81,6 +72,7 @@ const AddUnit = ({
 
   const handleSubmit = (e) => {
     if (e) e.preventDefault();
+
     handleUnitUpdate({
       id: v4(),
       unitName: activeUnit,
@@ -88,12 +80,11 @@ const AddUnit = ({
       percentage: activePercentage,
       time: activeTime,
       day: moment(new Date()).format("DD-MM-YYYY"),
-      session,
     });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="unit__form">
       <div className="topContainer">
         {unitOptions.map(({ name, src }) => (
           <UnitDrink
@@ -106,14 +97,14 @@ const AddUnit = ({
           />
         ))}
       </div>
-      Cl
+      Centiliter
       <ValueOptions
         items={getCentiliterSet()}
         onClick={setActiveCl}
         currentValue={activeCl}
       />
       <label>
-        %
+        Prosent
         <ValueOptions
           items={getPercentagesSet()}
           onClick={setActivePercentage}
@@ -121,7 +112,7 @@ const AddUnit = ({
         />
       </label>
       <label>
-        Tidspunkt
+        Tid
         <ValueOptions
           items={minutes}
           lastHour={getTimeSet()}
@@ -129,9 +120,21 @@ const AddUnit = ({
           onClick={setActiveTime}
           currentValue={activeTime}
         />
-        {activeCl} {activePercentage} @ {activeTime.time}
       </label>
-      <input type="submit" />
+      <div style={{ marginTop: 48 }}>
+        <Button
+          type="submit"
+          onClick={() => {
+            localStorage.removeItem("units");
+            window.location.reload();
+          }}
+          color={colorPalette.white}
+          borderColor={colorPalette.white}
+          backgroundColor={colorPalette.royal}
+        >
+          Legg til +
+        </Button>
+      </div>
     </form>
   );
 };

@@ -1,16 +1,11 @@
 import { saveKeyToLocalStorage } from "../utils";
 
-const WeightForm = ({
-  weight,
-  input,
-  updateInput,
-  updateParticipant,
-  participant,
-}) => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    updateParticipant({ ...participant, weight: input });
+const WeightForm = ({ weight, input, updateInput, setWeight }) => {
+  const handleSubmit = (e) => {
+    if (e) e.preventDefault();
+
     saveKeyToLocalStorage("weight", input);
+    setWeight(input);
   };
 
   return (

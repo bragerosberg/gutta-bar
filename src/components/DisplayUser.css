@@ -1,0 +1,15 @@
+.user__display {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 5px;
+}
+
+.user__display--img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-position: center;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+}

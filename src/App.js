@@ -1,203 +1,217 @@
 import "./App.css";
 import "./AddUnit.css";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
+import "./App.css";
+
+import keanu from "./assets/beinings.png";
+import johusa from "./assets/gdog.png";
+import lilb from "./assets/lilb.png";
+
+import { colorPalette } from "./theme";
 
 import AddUnit from "./components/AddUnit";
 import ResetWeight from "./components/ResetWeight";
 import WeightForm from "./components/WeightForm";
+import DisplayUser from "./components/DisplayUser";
 
 import {
-  saveKeyToLocalStorage,
   getKeyFromLocalStorage,
   updateUnitsToLatestTenHours,
   getPromille,
   getGrams,
+  saveKeyToLocalStorage,
 } from "./utils";
 import DisplayUnits from "./components/DisplayUnits";
-import SessionOption from "./components/SessionOption";
-
-/**
- *
- * On landing page, after entering body weight, a session shall be selected
- * Render sessions that are on DD-MM-YYYY or DD-MM-YYYY -1 DD
- * Admin can create sessions
- */
+import Button from "./components/Button";
 
 // localStorage.clear();
 
 const App = () => {
-  const [input, updateInput] = useState();
+  const [input, updateInput] = useState("");
   const [showUnitForm, toggleShowUnitForm] = useState(false);
+  const [addUnit, toggleAddUnit] = useState(false);
 
-  const [editSession, toggleEditSession] = useState(false);
-
-  // const [promille, updatePromille] = useState(0);
-  // const [weight, setWeight] = useState(getKeyFromLocalStorage("weight"));
-  // const [units, updateUnits] = useState(
-  //   JSON.parse(getKeyFromLocalStorage("units") || "[]")
-  // );
-  const userId = "Brage";
-
-  const [participant, updateParticipant] = useState({
-    name: userId,
-    img: "https://media-exp1.licdn.com/dms/image/C4D03AQEkekboMDFH-A/profile-displayphoto-shrink_200_200/0/1647851404608?e=1659571200&v=beta&t=wWdnu8p9ZmRQT8PhgLGToclqvMfz4BmSzoSxVt6uh1g",
-    units: JSON.parse(getKeyFromLocalStorage("units") || "[]"),
-    promille: 0,
-    weight: getKeyFromLocalStorage("weight"),
-  });
-
-  const [sessions, updateSessions] = useState(
-    JSON.parse(getKeyFromLocalStorage("sessions") || "[]")
+  const [promille, setPromille] = useState(0);
+  const [weight, setWeight] = useState(getKeyFromLocalStorage("weight"));
+  const [units, setUnits] = useState(
+    JSON.parse(getKeyFromLocalStorage("units") || "[]")
   );
-  const [selectedSession, updatedSelectedSession] = useState();
 
-  const dateToday = moment(new Date()).format("DD-MM-yyyy");
+  const name = "Brage";
+  const image = keanu;
 
-  const getTotalGram = () => {
+  const getTotalGram = (newUnits = []) => {
+    const unitsToUse = newUnits.length > 0 ? newUnits : units;
+
     let gramAcc = 0;
-    participant?.units.forEach(
+    unitsToUse.forEach(
       (unit) => (gramAcc += getGrams(unit?.cl, unit?.percentage))
     );
     return gramAcc.toFixed(3);
   };
 
-  const getSessionLengthInHours = () => {
-    return (
-      moment().diff(
-        moment(participant?.units[0]?.time?.time, "HH:mm"),
-        "minutes"
-      ) / 60
+  const getSessionLengthInHours = (newUnit) => {
+    const unitsToUse = newUnit ? [...units, newUnit] : units;
+
+    const duration = unitsToUse[0]?.time?.time
+      ? unitsToUse[0]?.time?.time
+      : moment(new Date()).format("HH:mm");
+
+    return moment().diff(moment(duration, "HH:mm"), "minutes") / 60;
+  };
+
+  const promilleCallback = (newUnit) => {
+    const unitsToUse = newUnit ? [...units, newUnit] : units;
+
+    const currentPromille = getPromille(
+      getTotalGram(unitsToUse),
+      weight,
+      getSessionLengthInHours(unitsToUse)
+    );
+
+    if (currentPromille <= 0) {
+      setUnits([]);
+      saveKeyToLocalStorage("units", JSON.stringify([]));
+      return 0;
+    }
+
+    return currentPromille.toFixed(2);
+  };
+
+  const handleDeleteUnit = (unit) => {
+    const { id } = unit;
+    const newUnits = units.filter((unit) => unit.id !== id);
+    setUnits(newUnits);
+    setPromille(
+      newUnits.length < 1
+        ? 0
+        : getPromille(
+            getTotalGram(newUnits),
+            weight,
+            getSessionLengthInHours(newUnits)
+          ).toFixed(2)
     );
   };
 
   useEffect(() => {
-    // Attempt fetching session
-    const sessionFromLocalStorage = JSON.parse(
-      getKeyFromLocalStorage("session") || "{}"
-    );
-    const sessionAlreadyToday =
-      sessionFromLocalStorage?.date?.substring(0, 10) === dateToday;
-    if (sessionAlreadyToday) updatedSelectedSession(sessionFromLocalStorage);
-
-    // Update units to be last 10 hours
-    updateParticipant({
-      ...participant,
-      units: updateUnitsToLatestTenHours(participant?.units, moment),
-    });
-
-    // Calculate promille
-    const totalGrams = getTotalGram();
-    const sesstionDurationInhours = getSessionLengthInHours();
-    updateParticipant({
-      ...participant,
-      promille: getPromille(
-        totalGrams,
-        participant?.weight,
-        sesstionDurationInhours
-      ),
-    });
+    setPromille(promilleCallback());
   }, []);
 
   const handleUnitUpdate = (newUnit) => {
-    const newUnits = updateUnitsToLatestTenHours(
-      [...participant?.units, newUnit],
-      moment
-    );
+    const newUnits = updateUnitsToLatestTenHours([...units, newUnit], moment);
     saveKeyToLocalStorage("units", JSON.stringify(newUnits));
-    updateParticipant({ ...participant, units: newUnits });
+    setPromille(promilleCallback(newUnit));
+
+    setUnits(newUnits);
   };
 
-  const handleSessionCreate = () => {
-    const firstSessionOfDay = sessions.map((session) => {
-      return session?.date.includes(selectedSession);
-    }).length;
+  const gutta = [
+    {
+      id: 0,
+      name: "Jonas",
+      src: image,
+      promille: 0.31,
+      units: [],
+    },
+    {
+      id: 1,
+      name: "Ådne",
+      src: johusa,
+      promille: 0.33,
+      units: [],
+    },
+    {
+      id: 2,
+      name: "Mathias",
+      src: lilb,
+      promille: 0.45,
+      units: [],
+    },
+  ];
 
-    if (firstSessionOfDay.length === 0) {
-      const newSession = { date: dateToday, participants: [] };
-      updateSessions([...sessions, newSession]);
-      updatedSelectedSession(newSession);
-      saveKeyToLocalStorage("session", JSON.stringify(newSession));
-      saveKeyToLocalStorage(
-        "sessions",
-        JSON.stringify([...sessions, newSession])
-      );
-      toggleEditSession(false);
-      return;
-    }
-    const newSession = {
-      date: `${dateToday}-${firstSessionOfDay}`,
-      participants: [],
-    };
-    saveKeyToLocalStorage("session", JSON.stringify(newSession));
-    saveKeyToLocalStorage(
-      "sessions",
-      JSON.stringify([...sessions, newSession])
-    );
-    updatedSelectedSession(newSession);
-    toggleEditSession(false);
+  const getBackgroundColor = () => {
+    if (promille < 0.5) return "purple";
+    if (promille > 0.5 && promille < 1) return "green";
+    if (promille > 1) return "crimson";
   };
 
   return (
     <div className="App">
-      {!participant?.weight && (
+      {!weight && (
         <WeightForm
-          weight={participant?.weight}
+          weight={weight}
           input={input}
           updateInput={updateInput}
-          updateParticipant={updateParticipant}
-          participant={participant}
+          setWeight={setWeight}
         />
       )}
-      {participant?.weight && (!selectedSession || editSession) && (
+      {!addUnit && (
         <div>
-          <p>Session not selected</p>
-          <p>Join a session or ask admin to create one</p>
-          {sessions.map((session) => {
-            return (
-              <SessionOption
-                key={session.date}
-                session={session}
-                updateSession={updatedSelectedSession}
-                toggleEditSession={toggleEditSession}
+          <aside>
+            <section
+              style={{ backgroundColor: getBackgroundColor() }}
+              onClick={toggleAddUnit}
+              className="promille"
+            >
+              <h1>{promille}</h1>
+            </section>
+            <section onClick={toggleAddUnit} className="add__unit">
+              +
+            </section>
+          </aside>
+          {units && (
+            <div style={{ marginTop: 48 }}>
+              <DisplayUnits
+                units={units}
+                deleteUnit={handleDeleteUnit}
+                promille={promille}
               />
-            );
-          })}
-          <br />
-          <br />
-          <button onClick={handleSessionCreate}>
-            Create new for {dateToday}
-          </button>
+            </div>
+          )}
+          <section className="user__displays">
+            {gutta.map((gutt) => (
+              <DisplayUser gutt={gutt} />
+            ))}
+          </section>
         </div>
       )}
-      {participant?.weight && selectedSession && !editSession && (
+      {weight && addUnit && (
         <div>
-          <h1>{selectedSession?.date}</h1>
-          {!editSession && (
-            <button onClick={() => toggleEditSession(true)}>
-              Go to session overview
-            </button>
-          )}
-          {participant?.weight}kg
+          <Button
+            color="black"
+            borderColor={colorPalette.concrete}
+            backgroundColor={colorPalette.concrete}
+            onClick={() => toggleAddUnit(false)}
+          >
+            ← Gå tilbake
+          </Button>
+          {name}, {weight}kg
+          {/* <img src={image} alt="keanu" /> */}
           <AddUnit
             showUnitForm={showUnitForm}
             toggleShowUnitForm={toggleShowUnitForm}
             handleUnitUpdate={handleUnitUpdate}
           />
-          <ResetWeight />
           <br />
-          <button
+          <br />
+          <DisplayUnits
+            units={units}
+            deleteUnit={handleDeleteUnit}
+            promille={promille}
+          />
+          {/* <ResetWeight />
+          <Button
             onClick={() => {
               localStorage.removeItem("units");
               window.location.reload();
             }}
+            color={colorPalette.white}
+            borderColor={colorPalette.redOrange}
+            backgroundColor={colorPalette.redOrange}
           >
             Clear units localstorage
-          </button>
-          <br />
-          <br />
-          <DisplayUnits units={participant?.units} />
-          <h1>Promille {participant?.promille}</h1>
+          </Button> */}
         </div>
       )}
     </div>
