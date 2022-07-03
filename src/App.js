@@ -200,7 +200,6 @@ const App = () => {
             deleteUnit={handleDeleteUnit}
             promille={promille}
           />
-          {/* <ResetWeight />
           <Button
             onClick={() => {
               localStorage.removeItem("units");
@@ -210,8 +209,9 @@ const App = () => {
             borderColor={colorPalette.redOrange}
             backgroundColor={colorPalette.redOrange}
           >
-            Clear units localstorage
-          </Button> */}
+            <h1>ADMIN</h1>
+            <h2>Reset settings</h2>
+          </Button>
         </div>
       )}
     </div>

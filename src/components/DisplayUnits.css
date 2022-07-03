@@ -15,7 +15,6 @@
 
 .units__edit {
   position: fixed;
-  right: 0;
-  padding-right: 20px;
   margin: 8px 0 0 0;
+  padding-left: 10px;
 }

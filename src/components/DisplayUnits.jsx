@@ -30,6 +30,12 @@ const DisplayUnits = ({ units, deleteUnit, promille }) => {
           key={String(Math.random() * 1)}
           className="units__display--unit"
         >
+          <p>{unit?.time?.time}</p>
+          <img
+            className="units__display--unit-illustration"
+            src={illustrations[unit?.unitName]}
+            alt=""
+          />
           {deleteMode && (
             <p
               onClick={() => {
@@ -40,12 +46,6 @@ const DisplayUnits = ({ units, deleteUnit, promille }) => {
               Slett
             </p>
           )}
-          <p>{unit?.time?.time}</p>
-          <img
-            className="units__display--unit-illustration"
-            src={illustrations[unit?.unitName]}
-            alt=""
-          />
         </section>
       ))}
     </div>
