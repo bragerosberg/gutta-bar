@@ -93,6 +93,7 @@ const App = () => {
             getSessionLengthInHours(newUnits)
           ).toFixed(2)
     );
+    saveKeyToLocalStorage("units", JSON.stringify(newUnits));
   };
 
   useEffect(() => {
@@ -147,7 +148,7 @@ const App = () => {
           setWeight={setWeight}
         />
       )}
-      {!addUnit && (
+      {!addUnit && weight && (
         <div>
           <aside>
             <section
