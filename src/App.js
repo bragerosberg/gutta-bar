@@ -62,7 +62,8 @@ const App = () => {
   };
 
   const promilleCallback = (newUnit) => {
-    const unitsToUse = newUnit ? [...units, newUnit] : units;
+    const unitsList = newUnit ? [...units, newUnit] : units;
+    const unitsToUse = updateUnitsToLatestTenHours(unitsList, moment);
 
     const currentPromille = getPromille(
       getTotalGram(unitsToUse),

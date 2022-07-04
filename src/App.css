@@ -1,20 +1,6 @@
 html {
   /* concrete */
-  background-color: #F9F9F9; 
-  animation: animateBg 14s linear infinite;
-  background-image: linear-gradient(0deg, #ececec, #f2f2f2, #bbb4b4, #ffffff, #fff2f2);
-  background-size: 100% 400%;
-  background-repeat: no-repeat;
-  }
-
-@keyframes animateBg {
-  0% {
-    background-position: 15% 0%;
-  }
-
-  100% {
-    background-position: 0% 85%;
-  }
+  background-color: #F9F9F9;
 }
 
 .profile__picture {
