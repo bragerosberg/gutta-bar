@@ -11,7 +11,7 @@ import lilb from "./assets/lilb.png";
 import { colorPalette } from "./theme";
 
 import AddUnit from "./components/AddUnit";
-import ResetWeight from "./components/ResetWeight";
+// import ResetWeight from "./components/ResetWeight";
 import WeightForm from "./components/WeightForm";
 import DisplayUser from "./components/DisplayUser";
 
@@ -37,9 +37,6 @@ const App = () => {
   const [units, setUnits] = useState(
     JSON.parse(getKeyFromLocalStorage("units") || "[]")
   );
-
-  const name = "Brage";
-  const image = keanu;
 
   const getTotalGram = (newUnits = []) => {
     const unitsToUse = newUnits.length > 0 ? newUnits : units;
@@ -113,30 +110,6 @@ const App = () => {
     setUnits(newUnits);
   };
 
-  const gutta = [
-    {
-      id: 0,
-      name: "Jonas",
-      src: image,
-      promille: 0.31,
-      units: [],
-    },
-    {
-      id: 1,
-      name: "Ådne",
-      src: johusa,
-      promille: 0.33,
-      units: [],
-    },
-    {
-      id: 2,
-      name: "Mathias",
-      src: lilb,
-      promille: 0.45,
-      units: [],
-    },
-  ];
-
   const getBackgroundColor = () => {
     if (promille < 0.5) return "purple";
     if (promille > 0.5 && promille < 1) return "green";
@@ -176,11 +149,6 @@ const App = () => {
               />
             </div>
           )}
-          <section className="user__displays">
-            {gutta.map((gutt) => (
-              <DisplayUser gutt={gutt} />
-            ))}
-          </section>
         </div>
       )}
       {weight && addUnit && (
@@ -193,8 +161,6 @@ const App = () => {
           >
             ← Gå tilbake
           </Button>
-          {name}, {weight}kg
-          {/* <img src={image} alt="keanu" /> */}
           <AddUnit
             showUnitForm={showUnitForm}
             toggleShowUnitForm={toggleShowUnitForm}
@@ -207,18 +173,6 @@ const App = () => {
             deleteUnit={handleDeleteUnit}
             promille={promille}
           />
-          <Button
-            onClick={() => {
-              localStorage.removeItem("units");
-              window.location.reload();
-            }}
-            color={colorPalette.white}
-            borderColor={colorPalette.redOrange}
-            backgroundColor={colorPalette.redOrange}
-          >
-            <h1>ADMIN</h1>
-            <h2>Reset settings</h2>
-          </Button>
         </div>
       )}
     </div>

@@ -5,6 +5,8 @@ import pils from "../assets/pils.png";
 import vin from "../assets/vin.png";
 import shot from "../assets/shot.png";
 
+import { colorPalette } from "../theme";
+
 const illustrations = { custom, pils, vin, shot };
 
 const DisplayUnits = ({ units, deleteUnit, promille }) => {
@@ -36,11 +38,17 @@ const DisplayUnits = ({ units, deleteUnit, promille }) => {
             src={illustrations[unit?.unitName]}
             alt=""
           />
+          <p>{unit?.cl}cl {unit?.percentage}%</p>
           {deleteMode && (
             <p
               onClick={() => {
                 deleteUnit(unit);
                 toggleDeleteMode(false);
+              }}
+              style={{
+                backgroundColor: colorPalette.redOrange,
+                textAlign: "center",
+                padding: 10,
               }}
             >
               Slett
