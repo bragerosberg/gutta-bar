@@ -97,6 +97,11 @@ const App = () => {
   };
 
   useEffect(() => {
+    if (getSessionLengthInHours(units) < 0) {
+      setPromille(0);
+      setUnits([]);
+      return;
+    }
     setPromille(promilleCallback());
   }, []);
 
