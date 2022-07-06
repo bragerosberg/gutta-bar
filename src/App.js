@@ -4,16 +4,12 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import "./App.css";
 
-import keanu from "./assets/beinings.png";
-import johusa from "./assets/gdog.png";
-import lilb from "./assets/lilb.png";
-
+import budap from "./assets/hungry.png";
 import { colorPalette } from "./theme";
 
 import AddUnit from "./components/AddUnit";
 // import ResetWeight from "./components/ResetWeight";
 import WeightForm from "./components/WeightForm";
-import DisplayUser from "./components/DisplayUser";
 
 import {
   getKeyFromLocalStorage,
@@ -175,6 +171,7 @@ const App = () => {
           />
         </div>
       )}
+      <img className="hungary__flag" src={budap} alt="" />
     </div>
   );
 };

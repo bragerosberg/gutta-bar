@@ -7,6 +7,7 @@
 
 .units__display--unit-illustration {
   width: 50px;
+  border: 2px solid black;
 }
 
 .units__display--unit {

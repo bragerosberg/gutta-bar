@@ -38,7 +38,9 @@ const DisplayUnits = ({ units, deleteUnit, promille }) => {
             src={illustrations[unit?.unitName]}
             alt=""
           />
-          <p>{unit?.cl}cl {unit?.percentage}%</p>
+          <p>
+            {unit?.cl}cl {unit?.percentage}%
+          </p>
           {deleteMode && (
             <p
               onClick={() => {
@@ -49,6 +51,7 @@ const DisplayUnits = ({ units, deleteUnit, promille }) => {
                 backgroundColor: colorPalette.redOrange,
                 textAlign: "center",
                 padding: 10,
+                border: "2px solid white",
               }}
             >
               Slett
